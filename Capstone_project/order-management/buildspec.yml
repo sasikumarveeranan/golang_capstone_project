@@ -1,0 +1,32 @@
+version: 0.2
+
+env:
+  variables:
+    HOME: "/root"
+    GOCACHE: "/tmp/go-cache"
+
+phases:
+  install:
+    commands:
+      - go version
+      - mkdir -p "$GOCACHE"
+
+  pre_build:
+    commands:
+      - cd order-management
+      - go mod download
+
+  build:
+    commands:
+      - go build ./...
+
+  post_build:
+    commands:
+      - go test ./...
+      - go vet ./...
+      - echo "Build completed successfully."
+
+artifacts:
+  files:
+    - '**/*'
+  base-directory: 'order-management'

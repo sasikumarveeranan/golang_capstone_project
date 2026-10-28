@@ -1,0 +1,25 @@
+name: CI-CD
+on: [push]
+jobs:
+  build-test-scan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version: '1.24'
+      - run: go mod tidy
+      - run: go build ./...
+      - run: go test ./...
+      - run: go vet ./...
+      - uses: securego/gosec@master
+        with:
+          args: './...'
+
+  deploy:
+    needs: build-test-scan
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+
+    steps:
+      - run: echo "Deploy Go application to AWS EC2 using OIDC/IAM role."
