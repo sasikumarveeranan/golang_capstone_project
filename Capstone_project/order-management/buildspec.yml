@@ -13,15 +13,17 @@ phases:
 
   pre_build:
     commands:
-      - cd order-management
+      - cd "$CODEBUILD_SRC_DIR/Capstone_project/order-management"
       - go mod download
 
   build:
     commands:
+      - cd "$CODEBUILD_SRC_DIR/Capstone_project/order-management"
       - go build ./...
 
   post_build:
     commands:
+      - cd "$CODEBUILD_SRC_DIR/Capstone_project/order-management"
       - go test ./...
       - go vet ./...
       - echo "Build completed successfully."
@@ -29,4 +31,4 @@ phases:
 artifacts:
   files:
     - '**/*'
-  base-directory: 'order-management'
+  base-directory: 'Capstone_project/order-management'
